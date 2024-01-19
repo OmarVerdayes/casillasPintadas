@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+    <p>
+        Valor de x: <input type="number" title="Cantidad x" max="12" id="x" />
+    </p>
+    <p>
+        Valor de y: <input type="number" title="Cantidad y" max="12" id="y" />
+    </p>
+    <p>
+        Tiempo:<input type="number" title="Tiempo" max="30" id="tiempo" />
+    </p>
+    <p>
+        Coordenadas:<input type="number" title="coordenadas" max="256" id="coordenadas" />
+    </p>
+
+    <button onclick="cuadricula()">Iniciar</button>
+    <div id="tabla"></div>
+
+    <script>
+        const cuadricula = () => {
+            let valorX = document.getElementById("x").value;
+            let valorY = document.getElementById("y").value;
+            let tiempo = document.getElementById("tiempo").value;
+            let coordenadas = document.getElementById("coordenadas").value;
+            var espacioTabla = document.getElementById("tabla");
+            if (valorX == "") {
+                alert("Favor de ingresar un valor en X")
+            } else if (valorY == "") {
+                alert("Favor de ingresar un valor en Y")
+            } else if (tiempo == "") {
+                alert("Favor de ingresar un valor en tiempo")
+            } else if (coordenadas == "") {
+                alert("Favor de ingresar un valor para las coordenadas")
+            } else {
+
+
+
+                console.log("aqui va la logia de la programacion")
+                var celdasTabla = "";
+                for (var i = 0; i < parseInt(valorY); i++) {
+                    celdasTabla = celdasTabla + '<div style="display: flex;">';
+
+                    for (var j = 0; j < parseInt(valorX); j++) {
+                        celdasTabla = celdasTabla + "<div style='background-color: gray; border-color: black; width: 50px; height: 50px;' id='x" + j + "y" + i + "'>holaa</div>"
+
+                    }
+                    celdasTabla = celdasTabla + '</div>';
+                }
+                espacioTabla.innerHTML = celdasTabla;
+
+                let array=[x][y];
+                console.log(array);
+
+            }
+
+
+
+
+            // document.getElementById("valueInput").innerHTML = inputValue;
+
+
+
+
+
+
+        }
+
+    </script>
+</body>
+
+</html>
