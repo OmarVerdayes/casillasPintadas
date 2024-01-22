@@ -11,25 +11,89 @@
 
 
     <p>
-        Valor de x: <input type="number" title="Cantidad x" max="12" id="x" />
+        Valor de x: <input type="number" title="Cantidad x" id="x" />
     </p>
     <p>
-        Valor de y: <input type="number" title="Cantidad y" max="12" id="y" />
+        Valor de y: <input type="number" title="Cantidad y" id="y" />
     </p>
     <p>
-        Tiempo:<input type="number" title="Tiempo" max="30" id="tiempo" />
+        Tiempo:<input type="number" title="Tiempo" id="tiempo" />
     </p>
     <p>
-        Coordenadas:<input type="number" title="coordenadas" max="256" id="coordenadas" />
+        Coordenadas:<input type="number" title="coordenadas" id="coordenadas" />
     </p>
 
     <button onclick="cuadricula()">Iniciar</button>
     <div id="tabla"></div>
 
     <script>
+        let intervaloID;
+        let ciclosMaximos = 0;
+        let ciclosTranscurridos = 0;
+        let array;
+        let valorX;
+        let valorY;
+        let repetidos = false;
+        const generarCordenadaX = () => {
+            var cordenadaX = Math.round(Math.random() * (valorX - 1))
+            return cordenadaX
+        }
+        const generarCordenadaY = () => {
+            var cordenadaY = Math.round(Math.random() * (valorY - 1))
+            return cordenadaY;
+        }
+
+        const generarCordenadas = (coordenadas) => {
+            repetidos = false;
+            var listaCordenadasGuardadas = new Array();
+
+            //rompe el ciclo
+            const detener = () => {
+                ciclosTranscurridos++;
+                console.log("ciclos Transcurridos: "+ciclosTranscurridos)
+                console.log("ciclos Maximos: "+ciclosMaximos)
+                if (!(ciclosTranscurridos < ciclosMaximos)) {
+                    setTimeout(() => {
+                        clearInterval(intervaloID);
+                    }, 0);
+                    alert("Ya no se pueden llenar mas casillas")
+                }
+            }
+
+
+
+            for (let i = 0; i < coordenadas; i++) {
+                var xObtenida = generarCordenadaX();
+                var yObtenida = generarCordenadaX();
+                var cordenadasObtenidad = (xObtenida, yObtenida);
+
+                if (array[xObtenida][yObtenida] !== "X" || array[xObtenida][yObtenida] === "0") {
+                    listaCordenadasGuardadas.push([xObtenida, yObtenida]);
+                    array[xObtenida][yObtenida] = "X";
+                } else {
+                    //si se repite quito las "X" de donde de habian colocado
+                    for (let j = 0; j < listaCordenadasGuardadas.length; j++) {
+                        array[listaCordenadasGuardadas[j][0]][listaCordenadasGuardadas[j][1]] = "0";
+                    }
+                    console.log("Cordenada Repetida: " + "x" + xObtenida + " y" + yObtenida)
+                    repetidos = true;
+                    break;
+                }
+            }
+            if (!repetidos) {
+                for (let i = 0; i < listaCordenadasGuardadas.length; i++) {
+                    var miDiv = document.getElementById("x" + listaCordenadasGuardadas[i][0] + "y" + listaCordenadasGuardadas[i][1]);
+                    miDiv.style.backgroundColor = "blue";
+                    miDiv.style.color = "#fff"
+                }
+
+                detener()
+            }
+        }
+
         const cuadricula = () => {
-            let valorX = document.getElementById("x").value;
-            let valorY = document.getElementById("y").value;
+            valorX = document.getElementById("x").value;
+            valorY = document.getElementById("y").value;
             let tiempo = document.getElementById("tiempo").value;
             let coordenadas = document.getElementById("coordenadas").value;
             var espacioTabla = document.getElementById("tabla");
@@ -41,36 +105,37 @@
                 alert("Favor de ingresar un valor en tiempo")
             } else if (coordenadas == "") {
                 alert("Favor de ingresar un valor para las coordenadas")
+            } else if ((valorX * valorY) < coordenadas) {
+                alert("La cantidad de celdas por pintar no puede ser mayor a las celdas que existen")
+            }if (valorX > 10||valorX < 1) {
+                alert("Favor de ingresar un valor entre 1 y 10 en X")
+            } else if (valorY >10 ||valorY < 1) {
+                alert("Favor de ingresar un valor  entre 1 y 10  en Y")
             } else {
+                ciclosMaximos = Math.floor((valorX * valorY) / coordenadas);
+                array = new Array(valorX);
+                valorY = parseInt(valorY)
+                for (let i = 0; i < valorX; i++) {
+                    array[i] = new Array(valorY);
+                }
 
-
-
-                console.log("aqui va la logia de la programacion")
                 var celdasTabla = "";
                 for (var i = 0; i < parseInt(valorY); i++) {
                     celdasTabla = celdasTabla + '<div style="display: flex;">';
 
                     for (var j = 0; j < parseInt(valorX); j++) {
-                        celdasTabla = celdasTabla + "<div style='background-color: gray; border-color: black; width: 50px; height: 50px;' id='x" + j + "y" + i + "'>holaa</div>"
+                        celdasTabla = celdasTabla + "<div style='background-color: gray; border: 1px solid black; width: 50px; height: 50px;' id='x" + j + "y" + i + "'>x" + j + " y" + i + "</div>"
 
                     }
                     celdasTabla = celdasTabla + '</div>';
                 }
                 espacioTabla.innerHTML = celdasTabla;
 
-                let array=[x][y];
-                console.log(array);
+
+
+                intervaloID = setInterval(() => generarCordenadas(coordenadas), tiempo * 1000);
 
             }
-
-
-
-
-            // document.getElementById("valueInput").innerHTML = inputValue;
-
-
-
-
 
 
         }
